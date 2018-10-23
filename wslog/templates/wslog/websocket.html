@@ -1,0 +1,155 @@
+<!doctype html>
+{% load static %}
+
+<html>
+<head>
+
+    <link rel="stylesheet" href="{% static 'uikit-2.22.0/css/uikit.min.css'%}" />
+    <link rel="stylesheet" href="{% static 'uikit-2.22.0/css/components/progress.gradient.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/radialindicator.css'%}"/>
+    <script src="{% static 'js/jquery-1.11.2.js'%}"></script>
+    <script src="{% static 'js/radialIndicator.min.js'%}"></script>
+    <script src="{% static 'uikit-2.22.0/js/uikit.js'%}"></script>
+    <script src="{% static 'uikit-2.22.0/js/components/sticky.min.js'%}"></script>
+
+    <style type="text/css">
+        #logoutput {overflow:scroll; white-space:nowrap;}
+    </style>
+
+
+
+</head>
+<body>
+	<div id="procPer"></div>
+	<br />
+	<span id="app_name" style="visibility:hidden">{{ app_name }}</span>
+	<span id="deploy_version" style="visibility:hidden">{{ deploy_version }}</span>
+	<span id="env_type" style="visibility:hidden">{{ env_type }}</span>
+	<span id="operation_no" style="visibility:hidden">{{ operation_no }}</span>
+	<div id="logoutput" style="background:#000; color:#FFF">...</div>
+	<br />
+</body>
+    <script>
+
+        var websocket = null;
+
+        var app_name = document.getElementById("app_name").innerHTML;
+        var deploy_version = document.getElementById("deploy_version").innerHTML || "Demo";
+        var env_type = document.getElementById("env_type").innerHTML || "Demo";
+        var operation_no = document.getElementById("operation_no").innerHTML;
+
+        //判断当前浏览器是否支持WebSocket
+        if('WebSocket' in window){
+            var messageContainer = document.getElementById("logoutput");
+            var percentContainer = document.getElementById("procPer");
+            var radialObj = {};
+
+            var hostname = window.location.hostname;
+            var port = window.location.port || 8888;
+            console.log(hostname, port);
+            websocket = new WebSocket("ws://"+ hostname +":" + port  +"/channels_ws/");
+        }
+        else{
+            alert('Not support websocket')
+        }
+
+        //连接发生错误的回调方法
+        websocket.onerror = function(){
+            console.log("error");
+        };
+
+        //连接成功建立的回调方法
+        websocket.onopen = function(evt){
+            console.log("open");
+        }
+
+        //接收到消息的回调方法
+        websocket.onmessage = function(evt){
+            console.log("new msg is: ", evt.data);
+            if (evt.data.length != 0) {
+                var temp_array = evt.data.split("\n");
+                for (temp_item in temp_array) {
+                    if  (temp_array[temp_item].indexOf("[ERROR]") > 0 ) {
+                            temp_array[temp_item] = "<font color='red'>" +  temp_array[temp_item] + "</font>"
+                    }
+                    temp_array[temp_item] = temp_array[temp_item].replace(/\\n/g,"</br>");//.replace(/</g, "&lt;").replace(/>/g, "&gt;");;
+                    temp_array[temp_item] = temp_array[temp_item] +  "</br>";
+                    messageContainer.innerHTML += temp_array[temp_item];
+                }
+            }
+            var d = messageContainer.scrollHeight;
+            messageContainer.scrollTop = d;
+            var pattern = /progress/gi;
+            var ans = messageContainer.innerHTML.match(/\w+.\w+,\sdeploy\sprogress\s\d+/g);
+            var dic = {};
+            for (item in ans){
+                dic_key = ans[item].split(',')[0];
+                dic_value = ans[item].split(',')[1].split(" ")[3];
+                dic[dic_key] = dic_value;
+            }
+            for (key in dic) {
+                if(document.getElementById(key + "label") == undefined){
+                    var span=document.createElement('span');
+                    span.setAttribute("id", key + "label");
+                    percentContainer.appendChild(span);
+                    document.getElementById(key + "label").innerHTML = key
+                }
+                if(document.getElementById(key) == undefined){
+                    var span=document.createElement('span');
+                    span.setAttribute("id", key);
+                    percentContainer.appendChild(span);
+                    //document.getElementById(key).innerHTML =dic[key];
+                    if  (messageContainer.innerHTML.indexOf("[ERROR]") > 0 ) {
+                        $(span).radialIndicator({
+                                barColor:'#FF0000',
+                                radius: 25,
+                                barWidth: 3,
+                                initValue: dic[key],
+                                roundCorner : true,
+                                percentage: true
+                        });
+                    } else {
+                        $(span).radialIndicator({
+                                barColor:'#87CEEB',
+                                radius: 25,
+                                barWidth: 3,
+                                initValue: dic[key],
+                                roundCorner : true,
+                                percentage: true
+                        });
+                    }
+                    radialObj[key] =$(span).data('radialIndicator');
+                }
+                radialObj[key].animate(dic[key]);
+            }
+        }
+
+        //连接关闭的回调方法
+        websocket.onclose = function(){
+            console.log("close");
+        }
+
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function(){
+            websocket.close();
+        }
+
+
+        //关闭连接
+        function closeWebSocket(){
+            websocket.close();
+        }
+
+        //发送消息
+        setInterval(function send(){
+            var message = {
+                "deploy_version": deploy_version,
+                "app_name": app_name,
+                "env_type": env_type,
+                "operation_no": operation_no
+            }
+            websocket.send(JSON.stringify(message));
+            }
+        ,2000)
+    </script>
+</html>

@@ -25,7 +25,7 @@ SECRET_KEY = '#vc97xop$5%_9(k#!p$okt)uxsmu=rl+6gs#@87n4%p)#=#^pu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,7 +53,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mablog.urls'
 ASGI_APPLICATION = "mablog.routing.application"
-PRISMLOGAPI_URL = "http://127.0.0.1:8888"
 
 TEMPLATES = [
     {
@@ -93,6 +92,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+X_FRAME_OPTIONS = 'allow-from http://127.0.0.1:8888/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

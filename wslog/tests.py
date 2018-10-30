@@ -5,7 +5,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8'}
 payload = {'deploy_version': "2018-06-21-12DB",
            'app_name': "ZIP-BACKEND-JAVA",
            'ip_address': "1.1.1.1",
-           'env_type': "UAT",
+           'env_name': "UAT",
            'user_name': "chengang",
            'operation_type': "deploy",
            'operation_no': 8,

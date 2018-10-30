@@ -24,7 +24,7 @@
 	<br />
 	<span id="app_name" style="visibility:hidden">{{ app_name }}</span>
 	<span id="deploy_version" style="visibility:hidden">{{ deploy_version }}</span>
-	<span id="env_type" style="visibility:hidden">{{ env_type }}</span>
+	<span id="env_name" style="visibility:hidden">{{ env_name }}</span>
 	<span id="operation_no" style="visibility:hidden">{{ operation_no }}</span>
 	<div id="logoutput" style="background:#000; color:#FFF">...</div>
 	<br />
@@ -35,7 +35,7 @@
 
         var app_name = document.getElementById("app_name").innerHTML;
         var deploy_version = document.getElementById("deploy_version").innerHTML || "Demo";
-        var env_type = document.getElementById("env_type").innerHTML || "Demo";
+        var env_name = document.getElementById("env_name").innerHTML || "Demo";
         var operation_no = document.getElementById("operation_no").innerHTML;
 
         //判断当前浏览器是否支持WebSocket
@@ -145,7 +145,7 @@
             var message = {
                 "deploy_version": deploy_version,
                 "app_name": app_name,
-                "env_type": env_type,
+                "env_name": env_name,
                 "operation_no": operation_no
             }
             websocket.send(JSON.stringify(message));

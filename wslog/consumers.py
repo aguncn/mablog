@@ -20,7 +20,7 @@ class MabLogConsumer(WebsocketConsumer):
         app_name = text_data_json["app_name"]
         operation_no = text_data_json["operation_no"]
         # 用于从日志数据库里找到发布单的发布日志
-        if text_data_json["env_type"] == "Demo":
+        if text_data_json["env_name"] == "Demo":
             deploy_version = text_data_json["deploy_version"]
             log_set = LogsDB.objects.filter(app_name=app_name,
                                             deploy_version=deploy_version,
@@ -30,10 +30,10 @@ class MabLogConsumer(WebsocketConsumer):
         # 用于从日志数据库里找到服务器启停的发布日志
         if text_data_json["deploy_version"] == "Demo":
             deploy_version = "Demo",
-            env_type = text_data_json["env_type"]
+            env_name = text_data_json["env_name"]
             log_set = LogsDB.objects.filter(app_name,
                                             deploy_version=deploy_version,
-                                            env_type=env_type,
+                                            env_name=env_name,
                                             operation_no=operation_no,
                                             operation_type="operation")\
                 .order_by('id')

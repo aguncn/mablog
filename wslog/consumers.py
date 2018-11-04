@@ -29,13 +29,13 @@ class MabLogConsumer(WebsocketConsumer):
                 .order_by('id')
         # 用于从日志数据库里找到服务器启停的发布日志
         if text_data_json["deploy_version"] == "Demo":
-            deploy_version = "Demo",
+            deploy_version = "Demo"
             env_name = text_data_json["env_name"]
-            log_set = LogsDB.objects.filter(app_name,
+            log_set = LogsDB.objects.filter(app_name=app_name,
                                             deploy_version=deploy_version,
                                             env_name=env_name,
                                             operation_no=operation_no,
-                                            operation_type="operation")\
+                                            operation_type="operate")\
                 .order_by('id')
         if log_set is not None:
             for log_item in log_set:

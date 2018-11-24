@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#vc97xop$5%_9(k#!p$okt)uxsmu=rl+6gs#@87n4%p)#=#^pu'
+SECRET_KEY = 'og75fj_j7p2i__kdo722@o7&+v2rvn$wl!elx_8)499f#u@^wr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -52,7 +52,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mablog.urls'
-ASGI_APPLICATION = "mablog.routing.application"
 
 TEMPLATES = [
     {
@@ -70,14 +69,12 @@ TEMPLATES = [
     },
 ]
 
+
+ASGI_APPLICATION = "mablog.routing.application"
+
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 DATABASES = {
     'default': {
@@ -89,6 +86,10 @@ DATABASES = {
         'PASSWORD': 'password',
     }
 }
+
+
+# Password validation
+# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -103,11 +104,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-X_FRAME_OPTIONS = 'allow-from http://127.0.0.1:8888/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), )
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+X_FRAME_OPTIONS = 'allow-from http://127.0.0.1:8888/'

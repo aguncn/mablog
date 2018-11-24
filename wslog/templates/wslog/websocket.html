@@ -4,21 +4,11 @@
 <html>
 <head>
 
-    <link rel="stylesheet" href="{% static 'uikit-2.22.0/css/uikit.min.css'%}" />
-    <link rel="stylesheet" href="{% static 'uikit-2.22.0/css/components/progress.gradient.css'%}"/>
-    <link rel="stylesheet" href="{% static 'css/radialindicator.css'%}"/>
     <script src="{% static 'js/jquery-1.11.2.js'%}"></script>
-    <script src="{% static 'js/radialIndicator.min.js'%}"></script>
     <script src="{% static 'js/jqmeter.min.js'%}"></script>
-    <script src="{% static 'uikit-2.22.0/js/uikit.js'%}"></script>
-    <script src="{% static 'uikit-2.22.0/js/components/sticky.min.js'%}"></script>
-
     <style type="text/css">
         #logoutput {overflow:scroll; white-space:nowrap;}
     </style>
-
-
-
 </head>
 <body>
 	<div id="procPer"></div>
@@ -77,7 +67,6 @@
             }
             var d = messageContainer.scrollHeight;
             messageContainer.scrollTop = d;
-            console.log(messageContainer.innerHTML);
             var ans = messageContainer.innerHTML.match(/\w+.\w+.\w+.\w+,\sdeploy\sprogress\s\d+/g);
             var dic = {};
             for (item in ans){

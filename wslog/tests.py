@@ -12,7 +12,7 @@ payload = {'deploy_version': "2018-06-21-12DB",
            'log_content': "...2018-07-23 08:43:38deploypkg \
            cnsz141851-10.25.164.109, deploy progress 60%"}
 try:
-    result = requests.post("http://localhost:8888/wslog/log_add/", headers=headers, data=json.dumps(payload))
+    result = requests.post("http://192.168.1.111:8888/wslog/log_add/", headers=headers, data=json.dumps(payload))
     print(result.status_code)
 except Exception as e:
     print(e)
